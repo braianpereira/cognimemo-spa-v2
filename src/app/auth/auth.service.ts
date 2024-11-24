@@ -51,25 +51,4 @@ export class AuthService {
         localStorage.removeItem('authUser');
       }))
   }
-
-  // Função para obter um cookie pelo nome
-  getCookie(name: string): string | null {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    console.log(document.cookie)
-    return match ? decodeURIComponent(match[2]) : null;
-  }
-
-// Função para verificar se o cookie já expirou
-  isCookieExpired(cookieName: string): boolean {
-    const cookieValue = this.getCookie(cookieName);
-    console.log(cookieValue)
-    if (cookieValue) {
-      // Supondo que a data de expiração do cookie esteja em um formato utilizável
-      const cookieData = JSON.parse(cookieValue); // Supondo que o valor do cookie seja um JSON com uma data de expiração
-      const expirationDate = new Date(cookieData.expiration); // Converta para um objeto Date
-      const now = new Date();
-      return now > expirationDate; // Verifica se a data atual já passou da data de expiração
-    }
-    return true; // Se o cookie não existe, consideramos que está expirado
-  }
 }

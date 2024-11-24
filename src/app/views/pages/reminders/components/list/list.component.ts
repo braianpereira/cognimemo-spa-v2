@@ -67,9 +67,10 @@ export class ListComponent extends DefaultClass implements OnInit, OnChanges {
         this.dialogRef.onClose.subscribe((data: any) => {
             if (data) {
                 this.messageService.add({ severity: data?.severity ?? 'info', detail: data?.summary, life: 3000 });
-            }
 
-            this.loadItems()
+                if (data.severity == 'success') { this.loadItems() }
+
+            }
         });
     }
 

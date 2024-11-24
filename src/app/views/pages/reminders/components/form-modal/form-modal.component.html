@@ -1,5 +1,5 @@
 <form
-    (ngSubmit)="onSubmit()"
+    (ngSubmit)="onSubmit($event)"
 >
     <div class="grid mt-2">
         <div class="col p-3">
@@ -62,6 +62,7 @@
                             optionLabel="description"
                             id="period"
                             formControlName="period"
+                            [ngClass]="{'ng-invalid ng-dirty': isInvalid('period')}"
                         />
                         <label for="period">Período</label>
                     </p-floatLabel>
@@ -76,8 +77,11 @@
                             styleClass="w-full {{isInvalid('reminder_date') ? 'ng-invalid ng-dirty' : '' }}"
                             placeholder="Data"
                             showIcon="true"
+                            appendTo="body"
                         />
-                        <label for="reminder_date">Data</label>
+                        <label
+                            for="reminder_date"
+                        >Data</label>
                     </p-floatLabel>
                 </div>
                 <div class="field col-12 md:col-4" *ngIf="form?.get('repeat').value">
@@ -87,7 +91,8 @@
                             inputId="ends_at"
                             formControlName="ends_at"
                             placeholder="Até"
-                            styleClass="w-full"
+                            styleClass="w-full {{isInvalid('ends_at') ? 'ng-invalid ng-dirty' : '' }}"
+                            appendTo="body"
                             showIcon="true"
                         />
                         <label for="ends_at">Até</label>

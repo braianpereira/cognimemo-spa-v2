@@ -28,10 +28,7 @@ export class RemindersComponent extends DefaultClass implements OnInit {
     }
 
     openNew() {
-        this.lastIndex = this.indexChanged
-        this.indexChanged = -1
-
-        this.dialogRef = this.dialogService.open(FormModalComponent, {
+                this.dialogRef = this.dialogService.open(FormModalComponent, {
             header: 'Novo Lembrete',
             contentStyle: { overflow: 'auto' },
             width: '50vw',
@@ -46,10 +43,12 @@ export class RemindersComponent extends DefaultClass implements OnInit {
 
         this.dialogRef.onClose.subscribe((data: any) => {
             if (data) {
-                this.messageService.add({ severity: data?.severity ?? 'info', detail: data?.summary, life: 3000 });
-            }
+                this.lastIndex = this.indexChanged
+                this.indexChanged = -1
 
-            this.indexChanged = -this.lastIndex
+                this.messageService.add({ severity: data?.severity ?? 'info', detail: data?.summary, life: 3000 });
+                this.indexChanged = this.lastIndex
+            }
         });
     }
 

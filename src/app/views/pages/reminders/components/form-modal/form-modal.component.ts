@@ -13,6 +13,7 @@ import {getUTC3Date} from '@utils/dateUtils'
 import {DefaultClass} from "../../../../../classes/default.class";
 import {DynamicDialogConfig, DynamicDialogRef} from "primeng/dynamicdialog";
 import {ConfirmationService} from "primeng/api";
+import {IReminder} from "../../reminders.component";
 
 @Component({
     selector: 'app-form-modal-reminder',
@@ -55,7 +56,7 @@ export class FormModalComponent extends DefaultClass implements OnInit {
         const endsAt = control.get('ends_at');
 
         if (repeat === true) {
-            if (!period?.value) {
+            if (!period?.value || period.value === '') {
                 period?.setErrors({ required: true });
             } else {
                 period?.setErrors(null);
@@ -109,8 +110,26 @@ export class FormModalComponent extends DefaultClass implements OnInit {
         })
     }
 
-    onSubmit() {
+    updateEvent(reminder: IReminder, action: string) {
         this.loadingService.show()
+
+        this.reminderService.put(reminder, action).subscribe({
+            next: () => {
+                this.ref.close({severity: 'success', summary: 'Tarefa atualizada'})
+            },
+            error: error => {
+                this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro ao salvar o registro'});
+                // Optionally log to a monitoring service
+                // monitoringService.log(error);
+                this.loadingService.hide()
+            },
+            complete: () => {
+                this.loadingService.hide()
+            }
+        })
+    }
+
+    onSubmit(event) {
         this.form?.markAllAsTouched()
         this.form?.markAsDirty()
 
@@ -125,21 +144,30 @@ export class FormModalComponent extends DefaultClass implements OnInit {
                     if(this.config.data) {
                         reminder.id = this.config.data?.id;
 
-                        this.reminderService.put(reminder).subscribe({
-                            next: () => {
-                                this.ref.close({severity: 'success', summary: 'Tarefa atualizada'})
-                            },
-                            error: error => {
-                                this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro ao salvar o registro'});
-                                // Optionally log to a monitoring service
-                                // monitoringService.log(error);
-                                this.loadingService.hide()
-                            },
-                            complete: () => {
-                                this.loadingService.hide()
-                            }
-                        })
+                        if(this.config.data && this.config.data.repeat) {
+                            this.confirmationService.confirm({
+                                target: event.target as EventTarget,
+                                message: 'Atualizar todos os demais?',
+                                header: 'Atualizar',
+                                icon: 'pi pi-info-circle',
+                                acceptButtonStyleClass:"p-button-danger p-button-text",
+                                rejectButtonStyleClass:"p-button-text p-button-text",
+                                acceptIcon:"none",
+                                rejectIcon:"none",
+
+                                accept: () => {
+                                    this.updateEvent(reminder, 'all')
+                                },
+                                reject: () => {
+                                    this.updateEvent(reminder, 'this')
+                                }
+                            });
+                        } else {
+                            this.updateEvent(reminder, 'this')
+                        }
                     } else {
+                        this.loadingService.show()
+
                         this.reminderService.post(reminder).subscribe({
                             next: () => {
                                 this.ref.close({ severity: 'success', summary: 'Tarefa criada' })
