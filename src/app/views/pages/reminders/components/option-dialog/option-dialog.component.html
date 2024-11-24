@@ -1,0 +1,16 @@
+<div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+    <span class="font-bold text-2xl block mb-2 mt-4">
+                {{ config?.data?.header }}
+            </span>
+    <p class="mb-0">{{ config?.data?.message }}</p>
+    <div class="flex align-items-center gap-2 mt-4">
+        <button
+            *ngFor="let button of config?.data?.buttons"
+            pButton
+            [label]="button.label"
+            class="w-8rem {{ button.class }}"
+            (click)="button.function('teste')"
+        >
+        </button>
+    </div>
+</div>

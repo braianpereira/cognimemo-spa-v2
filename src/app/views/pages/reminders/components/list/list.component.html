@@ -1,0 +1,91 @@
+<p-confirmDialog
+    key="positionDialog"
+    position="top"
+    rejectButtonStyleClass="p-button-outlined" >
+</p-confirmDialog>
+<p-table
+    #dtMonth
+    [value]="reminders?.data"
+    tableStyleClass="h-full h-24rem max-h-30rem w-full"
+    [columns]="cols"
+    responsiveLayout="scroll"
+    columnResizeMode="expand"
+    styleClass="p-datatable-sm"
+    [rows]="10"
+    [globalFilterFields]="['title','reminder_date','repeat_desc','status']"
+    [paginator]="true"
+    [rowsPerPageOptions]="[10,20,30]"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} tarefas"
+    [rowHover]="true"
+    dataKey="id"
+>
+    <ng-template pTemplate="caption">
+        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <div class="flex md:flex-row md:justify-content-between md:align-items-center">
+                <p-button
+                    label="Hoje"
+                    [outlined]="true"
+                    severity="info"
+                    class="ml-1 md:w-auto p-button-outlined {{remindersIndex[this.section] ? '' : 'disabled'}}"
+                    (click)="updateIndex('reset')"
+                />
+                <p-button
+                    [outlined]="true"
+                    severity="info"
+                    class="ml-1 md:w-auto p-button-outlined {{remindersIndex[this.section] ? '' : 'disabled'}}"
+                    (click)="updateIndex('decrement')"
+                    icon="pi pi-chevron-left"
+                />
+                <p-button
+                    [outlined]="true"
+                    severity="info"
+                    class="ml-1 md:w-auto p-button-outlined {{remindersIndex[this.section] ? '' : 'disabled'}}"
+                    (click)="updateIndex('increment')"
+                    icon="pi pi-chevron-right"
+                />
+                <span class="ml-1 text-info" style="color: #90caf9">{{ reminders?.label }}</span>
+            </div>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="onGlobalFilter(dtMonth, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
+            </span>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 3rem">
+            </th>
+            <th pSortableColumn="title">Nome <p-sortIcon field="title"></p-sortIcon></th>
+            <th pSortableColumn="reminder_date">Data <p-sortIcon field="reminder_date"></p-sortIcon></th>
+            <th pSortableColumn="repeat_desc">Repete <p-sortIcon field="repeat_desc"></p-sortIcon></th>
+            <th></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-reminder>
+        <tr style="height: 5rem !important;" [ngClass]="{'line-through': reminder.status}">
+            <td>
+                <p-checkbox [(ngModel)]="reminder.status" binary="true" (onChange)="toggleReminder(reminder)"></p-checkbox>
+            </td>
+            <td>
+                <span class="p-column-title">Nome</span>
+               {{reminder.title}}
+            </td>
+            <td>
+                <span class="p-column-title">Repete</span>
+                {{reminder.reminder_date | date: 'dd/MM/yyyy'}}
+            </td>
+            <td>
+                <span class="p-column-title">Repete</span>
+                {{reminder.repeat_desc}}
+            </td>
+            <td style="width:14%; min-width:10rem;">
+                <div class="flex">
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editReminder(reminder)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteReminder(reminder)"></button>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="footer" class="h-full" pStyleClass="h-full" />
+</p-table>

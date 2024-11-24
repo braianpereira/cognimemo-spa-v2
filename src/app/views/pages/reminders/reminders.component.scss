@@ -1,0 +1,10 @@
+:host ::ng-deep .p-accordion-header {
+    background-color: var(--teal-500) !important;
+    border-color: var(--teal-500);
+    color: #ffffff !important;
+}
+
+:host ::ng-deep .p-datatable-tfoot {
+    height: 100% !important;
+}
+

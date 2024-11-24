@@ -1,0 +1,123 @@
+<!--
+<div class="bg-light dark:bg-transparent min-vh-100 d-flex flex-row align-items-center">
+  <c-container>
+    <c-row class="justify-content-center">
+      <c-col lg="7" md="9" xl="6">
+        <c-card class="mx-4">
+          <c-card-body class="p-4">
+            <form cForm (ngSubmit)="submit()">
+              <h1>Registrar</h1>
+              <p class="text-body-secondary">Crie sua conta</p>
+              <c-input-group class="mb-3" [formGroup]="form">
+                <span cInputGroupText>
+                  <svg cIcon name="cilUser"></svg>
+                </span>
+                <input
+                  autoComplete="name"
+                  cFormControl
+                  placeholder="name"
+                  formControlName="name"
+                  [ngClass]="{ 'is-invalid':form.get('name')?.invalid && (form.get('name')?.dirty || form.get('name')?.touched) }"
+                />
+                <div *ngIf="form.get('name')?.invalid && (form.get('name')?.dirty || form.get('name')?.touched)"
+                     class="invalid-feedback">
+                  <div *ngIf="form.get('name')?.hasError('required')" class="text-center">
+                    Nome obrigatório.
+                  </div>
+                  <div *ngIf="form.get('name')?.hasError('serverError')" class="text-center">
+                    {{ form.get('name')?.getError('serverError') }}
+                  </div>
+                </div>
+              </c-input-group>
+              <c-input-group class="mb-3" [formGroup]="form">
+                <span cInputGroupText>&#64;</span>
+                <input
+                  autoComplete="email"
+                  cFormControl
+                  placeholder="Email"
+                  formControlName="email"
+                  [ngClass]="{ 'is-invalid':form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched) }"
+                />
+                <div *ngIf="form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)"
+                     class="invalid-feedback">
+                  <div *ngIf="form.get('email')?.hasError('required')" class="text-center">
+                    E-mail obrigatório.
+                  </div>
+                  <div *ngIf="form.get('email')?.hasError('email')" class="text-center">
+                    Precisa ser um e-mail válido.
+                  </div>
+                  <div *ngIf="form.get('email')?.hasError('serverError')" class="text-center">
+                    {{ form.get('email')?.getError('serverError') }}
+                  </div>
+                </div>
+              </c-input-group>
+              <c-input-group class="mb-3" [formGroup]="form">
+                <span cInputGroupText>
+                  <svg cIcon name="cilLockLocked"></svg>
+                </span>
+                <input
+                  autoComplete="new-password"
+                  cFormControl
+                  formControlName="password"
+                  placeholder="Password"
+                  type="password"
+                  [ngClass]="{ 'is-invalid':form.get('password')?.invalid && (form.get('password')?.dirty || form.get('password')?.touched) }"
+                />
+                <div *ngIf="form.get('password')?.invalid && (form.get('password')?.dirty || form.get('password')?.touched)"
+                     class="invalid-feedback">
+                  <div *ngIf="form.get('password')?.hasError('required')" class="text-center">
+                    Senha obrigatória.
+                  </div>
+                  <div *ngIf="form.get('password')?.hasError('minlength')" class="text-center" (blur)="tt()">
+                    Senha deve conter no mínimo 8 caracteres.
+                  </div>
+&lt;!&ndash;                  <div *ngIf="form.get('password')?.hasError('pattern')" class="text-center">&ndash;&gt;
+&lt;!&ndash;                    Senha deve conter pelo menos um caractere especial e uma letra maiúscula.&ndash;&gt;
+&lt;!&ndash;                  </div>&ndash;&gt;
+                </div>
+              </c-input-group>
+              <c-input-group class="mb-4" [formGroup]="form">
+                <span cInputGroupText>
+                  <svg cIcon name="cilLockLocked"></svg>
+                </span>
+                <input
+                  autoComplete="new-password"
+                  formControlName="password_confirmation"
+                  cFormControl
+                  placeholder="Repetir senha" type="password"
+                  [ngClass]="{ 'is-invalid':form.get('password_confirmation')?.invalid && (form.get('password_confirmation')?.dirty || form.get('password_confirmation')?.touched) }"
+                />
+                <div *ngIf="form.get('password_confirmation')?.invalid && (form.get('password_confirmation')?.dirty || form.get('password_confirmation')?.touched)"
+                     class="invalid-feedback">
+                  <div *ngIf="form.get('password_confirmation')?.hasError('required')" class="text-center">
+                    Senha obrigatória.
+                  </div>
+                  <div *ngIf="form.get('password_confirmation')?.errors?.['passwordMismatch']" class="text-center">
+                    As senhas não correspondem.
+                  </div>
+                </div>
+              </c-input-group>
+              <c-input-group class="mb-3" [formGroup]="form">
+                <label cInputGroupText for="user_type">
+                  Eu vou
+                </label>
+                <select cSelect id="user_type" formControlName="user_type">
+                  <option value="user" selected>Usar</option>
+                  <option value="advisor">Assessorar</option>
+                  <option value="both">Ambos</option>
+                </select>
+              </c-input-group>
+              <div class="d-grid">
+                <button cButton type="submit" color="success">Criar conta</button>
+                <div class="text-center">
+                  <p>Ou <a routerLink="/login">Já tem conta?</a></p>
+                </div>
+              </div>
+            </form>
+          </c-card-body>
+        </c-card>
+      </c-col>
+    </c-row>
+  </c-container>
+</div>
+-->

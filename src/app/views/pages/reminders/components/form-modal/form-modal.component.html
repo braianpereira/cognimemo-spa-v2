@@ -1,0 +1,104 @@
+<form
+    (ngSubmit)="onSubmit()"
+>
+    <div class="grid mt-2">
+        <div class="col p-3">
+
+            <div class="formgrid grid p-3">
+                <div class="field col-12">
+                    <p-floatLabel [formGroup]="form">
+                        <input
+                            id="title"
+                            formControlName="title"
+                            type="text"
+                            pInputText
+                            class="w-full"
+                            [ngClass]="{'ng-invalid ng-dirty': isInvalid('title')}"
+                        />
+                        <label for="title">Título</label>
+                    </p-floatLabel>
+                </div>
+            </div>
+            <div class="formgrid grid p-3">
+                <div class="field col-10 md:col-11 pr-0" >
+                    <p-floatLabel  [formGroup]="form" class="">
+                        <p-dropdown
+                            [options]="types"
+                            formControlName="reminder_type_id"
+                            id="reminder_type_id"
+                            optionLabel="name"
+                            optionValue="id"
+                            styleClass="w-full"
+                            [ngClass]="{ 'ng-invalid ng-dirty': isInvalid('reminder_type_id') }"
+                            placeholder="Categoria" />
+                        <label for="reminder_type_id">Categoria</label>
+                    </p-floatLabel>
+                </div>
+                <div class=" col-2 md:col-1 pl-0">
+                    <p-button label="" icon="pi pi-plus" size="large" />
+                </div>
+            </div>
+            <div class="formgrid grid p-3">
+                <div class="field col-12 md:col-4">
+                    <p-floatLabel  [formGroup]="form">
+                        <p-dropdown
+                            [options]="[{desc: 'Sim', value: true}, {desc: 'Nao', value: false}]"
+                            optionValue="value"
+                            optionLabel="desc"
+                            id="repeat"
+                            formControlName="repeat"
+                            styleClass="w-full"
+                            placeholder="Repete"
+                        />
+                        <label for="repeat">Repete</label>
+                    </p-floatLabel>
+                </div>
+                <div class="field col-12 md:col-8" *ngIf="form?.get('repeat').value">
+                    <p-floatLabel  [formGroup]="form">
+                        <p-dropdown
+                            [options]="periods"
+                            optionValue="value"
+                            styleClass="w-full"
+                            optionLabel="description"
+                            id="period"
+                            formControlName="period"
+                        />
+                        <label for="period">Período</label>
+                    </p-floatLabel>
+                </div>
+            </div>
+            <div class="formgrid grid p-3">
+                <div class="field col-12 md:col-4">
+                    <p-floatLabel  [formGroup]="form">
+                        <p-calendar
+                            id="reminder_date"
+                            formControlName="reminder_date"
+                            styleClass="w-full {{isInvalid('reminder_date') ? 'ng-invalid ng-dirty' : '' }}"
+                            placeholder="Data"
+                            showIcon="true"
+                        />
+                        <label for="reminder_date">Data</label>
+                    </p-floatLabel>
+                </div>
+                <div class="field col-12 md:col-4" *ngIf="form?.get('repeat').value">
+                    <p-floatLabel  [formGroup]="form">
+                        <p-calendar
+                            id="ends_at"
+                            inputId="ends_at"
+                            formControlName="ends_at"
+                            placeholder="Até"
+                            styleClass="w-full"
+                            showIcon="true"
+                        />
+                        <label for="ends_at">Até</label>
+                    </p-floatLabel>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="p-dialog-footer w-full" style="position:fixed; left: 0; bottom:0">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" type="button" class="p-button-text" (click)="hideDialog($event)"></button>
+        <button pButton pRipple label="Salvar" icon="pi pi-check" type="submit" class=""></button>
+    </div>
+
+</form>
