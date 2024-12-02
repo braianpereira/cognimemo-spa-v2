@@ -8,7 +8,6 @@ import {FormModalComponent} from "../form-modal/form-modal.component";
 import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
 import {AuthService} from "../../../../../auth/auth.service";
 import {OptionDialogComponent} from "../option-dialog/option-dialog.component";
-import {ReminderTypesService} from "../../../../../services/reminder_types.service";
 
 @Component({
   selector: 'app-list',
@@ -22,9 +21,6 @@ export class ListComponent extends DefaultClass implements OnInit, OnChanges {
 
     reminders: IReminders = { label: '', data: [] };
     remindersService = inject(RemindersService)
-
-    remiderTypes = []
-    reminderTypesService = inject(ReminderTypesService)
 
     dialogRef: DynamicDialogRef | undefined
     dialogService = inject(DialogService)
@@ -231,26 +227,14 @@ export class ListComponent extends DefaultClass implements OnInit, OnChanges {
                         next: (reminders) => {
                             this.reminders = reminders
                             this.length.emit(`${reminders.data.length}`)
-                        },
-                        error: (error: HttpErrorResponse) => {
-                            this.messageService.add({
-                                detail: error.message,
-                                severity: 'danger',
-                            });
+
                             this.loadingService.hide()
-                        }
-                    })
-
-                    this.reminderTypesService.getAdvisee(user.id).subscribe({
-                        next: (types) => {
-                            this.remiderTypes = types
                         },
                         error: (error: HttpErrorResponse) => {
                             this.messageService.add({
                                 detail: error.message,
                                 severity: 'danger',
                             });
-
                             this.loadingService.hide()
                         }
                     })
@@ -266,20 +250,6 @@ export class ListComponent extends DefaultClass implements OnInit, OnChanges {
                                 detail: error.message,
                                 severity: 'danger',
                             });
-                            this.loadingService.hide()
-                        }
-                    })
-
-                    this.reminderTypesService.get().subscribe({
-                        next: (types) => {
-                            this.remiderTypes = types
-                        },
-                        error: (error: HttpErrorResponse) => {
-                            this.messageService.add({
-                                detail: error.message,
-                                severity: 'danger',
-                            });
-
                             this.loadingService.hide()
                         }
                     })
