@@ -17,6 +17,19 @@
                         />
                         <label for="title">Título</label>
                     </p-floatLabel>
+                    <div *ngIf="isInvalid('title')"
+                         class="mb-3 text-red-500">
+                        <div *ngIf="form.get('title')?.hasError('required')" class="text-center">
+                            Campo obrigatório.
+                        </div>
+                    </div>
+
+                    <div *ngIf="isInvalid('title')"
+                         class="mb-3 text-red-500">
+                        <div *ngIf="form.get('title')?.hasError('backend')" class="text-center">
+                            {{ form.get('title')?.errors['backend'] }}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="formgrid grid p-3">
@@ -33,9 +46,22 @@
                             placeholder="Categoria" />
                         <label for="reminder_type_id">Categoria</label>
                     </p-floatLabel>
+                    <div *ngIf="isInvalid('reminder_type_id')"
+                         class="mb-3 text-red-500">
+                        <div *ngIf="form.get('reminder_type_id')?.hasError('required')" class="text-center">
+                            Campo obrigatório.
+                        </div>
+                    </div>
+
+                    <div *ngIf="isInvalid('reminder_type_id')"
+                         class="mb-3 text-red-500">
+                        <div *ngIf="form.get('reminder_type_id')?.hasError('backend')" class="text-center">
+                            {{ form.get('reminder_type_id')?.errors['backend'] }}
+                        </div>
+                    </div>
                 </div>
                 <div class=" col-2 md:col-1 pl-0">
-                    <p-button label="" icon="pi pi-plus" size="large" />
+                    <p-button label="" icon="pi pi-plus" size="large" (onClick)="newType($event)" />
                 </div>
             </div>
             <div class="formgrid grid p-3">
@@ -52,6 +78,19 @@
                         />
                         <label for="repeat">Repete</label>
                     </p-floatLabel>
+                    <div *ngIf="isInvalid('repeat')"
+                         class="mb-3 text-red-500">
+                        <div *ngIf="form.get('repeat')?.hasError('required')" class="text-center">
+                            Campo obrigatório.
+                        </div>
+                    </div>
+
+                    <div *ngIf="isInvalid('repeat')"
+                         class="mb-3 text-red-500">
+                        <div *ngIf="form.get('repeat')?.hasError('backend')" class="text-center">
+                            {{ form.get('repeat')?.errors['backend'] }}
+                        </div>
+                    </div>
                 </div>
                 <div class="field col-12 md:col-8" *ngIf="form?.get('repeat').value">
                     <p-floatLabel  [formGroup]="form">
@@ -66,6 +105,19 @@
                         />
                         <label for="period">Período</label>
                     </p-floatLabel>
+                    <div *ngIf="isInvalid('period')"
+                         class="mb-3 text-red-500">
+                        <div *ngIf="form.get('period')?.hasError('required')" class="text-center">
+                            Campo obrigatório.
+                        </div>
+                    </div>
+
+                    <div *ngIf="isInvalid('period')"
+                         class="mb-3 text-red-500">
+                        <div *ngIf="form.get('period')?.hasError('backend')" class="text-center">
+                            {{ form.get('period')?.errors['backend'] }}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="formgrid grid p-3">
@@ -83,6 +135,19 @@
                             for="reminder_date"
                         >Data</label>
                     </p-floatLabel>
+                    <div *ngIf="isInvalid('reminder_date')"
+                         class="mb-3 text-red-500">
+                        <div *ngIf="form.get('reminder_date')?.hasError('required')" class="text-center">
+                            Campo obrigatório.
+                        </div>
+                    </div>
+
+                    <div *ngIf="isInvalid('reminder_date')"
+                         class="mb-3 text-red-500">
+                        <div *ngIf="form.get('reminder_date')?.hasError('backend')" class="text-center">
+                            {{ form.get('reminder_date')?.errors['backend'] }}
+                        </div>
+                    </div>
                 </div>
                 <div class="field col-12 md:col-4" *ngIf="form?.get('repeat').value">
                     <p-floatLabel  [formGroup]="form">
@@ -97,6 +162,19 @@
                         />
                         <label for="ends_at">Até</label>
                     </p-floatLabel>
+                    <div *ngIf="isInvalid('ends_at')"
+                         class="mb-3 text-red-500">
+                        <div *ngIf="form.get('ends_at')?.hasError('required')" class="text-center">
+                            Campo obrigatório.
+                        </div>
+                    </div>
+
+                    <div *ngIf="isInvalid('ends_at')"
+                         class="mb-3 text-red-500">
+                        <div *ngIf="form.get('ends_at')?.hasError('backend')" class="text-center">
+                            {{ form.get('ends_at')?.errors['backend'] }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

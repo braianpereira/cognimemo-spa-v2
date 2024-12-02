@@ -7,6 +7,7 @@ import {ptBr} from "../assets/data/lang/pt-br";
     templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
+    message:any = null;
 
     constructor(private primengConfig: PrimeNGConfig) { }
 

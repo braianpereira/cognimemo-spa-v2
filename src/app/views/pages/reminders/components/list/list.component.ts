@@ -29,6 +29,7 @@ export class ListComponent extends DefaultClass implements OnInit, OnChanges {
     remindersIndex = 0
 
     cols: any[] = ['title', 'reminder_date', 'repeat_desc'];
+    @Input() advisee!: number;
 
     updateIndex(operation: 'reset' | 'increment' | 'decrement') {
         switch (operation) {
@@ -84,7 +85,7 @@ export class ListComponent extends DefaultClass implements OnInit, OnChanges {
                 }
             },
             {
-                label: "Esse",
+                label: reminder.repeat ? "Esse" : "Remover",
                 class: 'p-button-help w-8rem',
                 function: (action) => {
                     this.deleteReminderAction(reminder, 'maintain')
@@ -125,30 +126,81 @@ export class ListComponent extends DefaultClass implements OnInit, OnChanges {
 
     private deleteReminderAction(reminder: IReminder, deleteAction: string) {
         this.authService.getCsrfToken().subscribe(token => {
-            this.remindersService.delete(reminder, deleteAction).subscribe({
-                next: (data) => {
-                    this.messageService.add({severity: 'success', summary: 'Concluído', detail: 'Tarefa removida com sucesso'});
-                    this.loadItems();
-                },
-                error: (err) => {
-                    this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro ao deletar o registro'});
+            this.advisorService.advisee$.subscribe({
+                next: (advisee) => {
+                    if (advisee) {
+                        this.remindersService.deleteAdvisee(reminder, deleteAction, advisee.id).subscribe({
+                            next: () => {
+                                this.messageService.add({severity: 'success', summary: 'Concluído', detail: 'Tarefa removida com sucesso'});
+                                this.dialogRef.close();
+                                this.loadItems();
+                            },
+                            error: () => {
+                                this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro ao deletar o registro'});
+                                this.dialogRef.close();
+                            }
+                        })
+                    } else {
+                        this.remindersService.delete(reminder, deleteAction).subscribe({
+                            next: () => {
+                                this.messageService.add({severity: 'success', summary: 'Concluído', detail: 'Tarefa removida com sucesso'});
+                                this.dialogRef.close();
+                                this.loadItems();
+                            },
+                            error: () => {
+                                this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro ao deletar o registro'});
+                                this.dialogRef.close();
+                            }
+                        })
+                    }
                 }
             })
+
         })
     }
 
     toggleReminder(reminder: IReminder) {
+        let status = !reminder.status
+
         this.loadingService.show()
-        this.remindersService.put({...reminder, status: !reminder.status}).subscribe({
-            next: () => {
-                this.loadingService.hide()
-            },
-            error: (error: HttpErrorResponse) => {
-                this.messageService.add({
-                    detail: error.message,
-                    severity: 'danger',
-                });
-                this.loadingService.hide()
+
+        this.advisorService.advisee$.subscribe({
+            next: advisee => {
+                if (advisee) {
+                    this.remindersService.toggleStatusAdvisee({...reminder}, advisee.id).subscribe({
+                        next: () => {
+                            this.loadingService.hide()
+                        },
+                        error: (error: HttpErrorResponse) => {
+                            this.messageService.add({
+                                summary: "Erro ao salvar",
+                                detail: "Se o erro persistir entre em contato com o suporte",
+                                severity: 'error',
+                            });
+                            console.info(error)
+                            reminder.status = status
+
+                            this.loadingService.hide()
+                        }
+                    })
+                } else {
+                    this.remindersService.toggleStatus({...reminder}).subscribe({
+                        next: () => {
+                            this.loadingService.hide()
+                        },
+                        error: (error: HttpErrorResponse) => {
+                            this.messageService.add({
+                                summary: "Erro ao salvar",
+                                detail: "Se o erro persistir entre em contato com o suporte",
+                                severity: 'error',
+                            });
+                            console.info(error)
+                            reminder.status = status
+
+                            this.loadingService.hide()
+                        }
+                    })
+                }
             }
         })
     }
@@ -160,6 +212,7 @@ export class ListComponent extends DefaultClass implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['opened'] && changes['opened'].previousValue == false && changes['opened'].currentValue == true) {
             this.opened = false;
+
             this.loadItems()
         }
     }
@@ -167,18 +220,39 @@ export class ListComponent extends DefaultClass implements OnInit, OnChanges {
     private loadItems() {
         this.loadingService.show()
 
-        this.remindersService.get(this.remindersIndex, this.section).subscribe({
-            next: (reminders) => {
-                this.reminders = reminders
-                this.length.emit(`${reminders.data.length}`)
-                this.loadingService.hide()
-            },
-            error: (error: HttpErrorResponse) => {
-                this.messageService.add({
-                    detail: error.message,
-                    severity: 'danger',
-                });
-                this.loadingService.hide()
+        this.advisorService.advisee$.subscribe({
+            next: (user: any) => {
+                if(user) {
+                    this.remindersService.getAdvisee(this.remindersIndex, this.section, user.id).subscribe({
+                        next: (reminders) => {
+                            this.reminders = reminders
+                            this.length.emit(`${reminders.data.length}`)
+                            this.loadingService.hide()
+                        },
+                        error: (error: HttpErrorResponse) => {
+                            this.messageService.add({
+                                detail: error.message,
+                                severity: 'danger',
+                            });
+                            this.loadingService.hide()
+                        }
+                    })
+                } else {
+                    this.remindersService.get(this.remindersIndex, this.section).subscribe({
+                        next: (reminders) => {
+                            this.reminders = reminders
+                            this.length.emit(`${reminders.data.length}`)
+                            this.loadingService.hide()
+                        },
+                        error: (error: HttpErrorResponse) => {
+                            this.messageService.add({
+                                detail: error.message,
+                                severity: 'danger',
+                            });
+                            this.loadingService.hide()
+                        }
+                    })
+                }
             }
         })
     }

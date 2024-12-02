@@ -12,19 +12,32 @@
     </button>
 
     <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
-        <button class="p-link layout-topbar-button">
-            <i class="pi pi-calendar"></i>
-            <span>Calendar</span>
-        </button>
-        <button class="p-link layout-topbar-button">
-            <i class="pi pi-user"></i>
-            <span>Profile</span>
-        </button>
-        <button class="p-link layout-topbar-button" [routerLink]="'/documentation'">
-            <i class="pi pi-cog"></i>
-            <span>Settings</span>
-        </button>
-        <p-menu #menu [model]="perfilItems" [popup]="true" />
-        <p-button (onClick)="menu.toggle($event)" icon="pi pi-ellipsis-v"/>
+        <p-button
+            pRipple
+            (onClick)="notification.toggle($event)"
+            [text]="true"
+            size="large"
+            [plain]="true"
+        >
+            <i class="pi pi-bell p-text-secondary " badgeStyleClass="p-badge-contrast" pBadge style="font-size: 1.5rem" value="2"></i>
+        </p-button>
+        <p-menu #notification [model]="perfilItems" [popup]="true" />
+        <p-menu #menu [model]="perfilItems" [popup]="true" >
+            <ng-template pTemplate="start">
+                <div class="flex flex-column mx-4 mt-2">
+                    <span class="font-bold">{{user?.name}}</span>
+                    <span class="text-sm p-text-secondary">{{user?.email}}</span>
+                </div>
+            </ng-template>
+        </p-menu>
+        <p-button
+            pRipple
+            (onClick)="menu.toggle($event)"
+            size="large"
+            [plain]="true"
+            [text]="true"
+        >
+            <i class="pi pi-user p-text-secondary " style="font-size: 1.5rem"></i>
+        </p-button>
     </div>
 </div>

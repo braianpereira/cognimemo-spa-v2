@@ -1,23 +1,31 @@
-import {inject, Injectable} from '@angular/core';
-import {HttpClient, HttpParams, HttpResponse} from "@angular/common/http";
+import {Injectable} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {GlobalConstants} from "../common/global-constants";
-import {FormControl, ɵElement, ɵFormGroupValue, ɵTypedOrUntyped} from "@angular/forms";
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class ReminderTypesService {
-  baseUrl = GlobalConstants.appURL + '/api';
+    baseUrl = environment.baseUrl + '/api';
 
-  constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient) { }
 
-  post(reminder: {}): Observable<any> {
-    return this.httpClient
-      .post(`${this.baseUrl}/reminders/types`, reminder, { withCredentials: true })
-  }
+    post(type: {}): Observable<any> {
+        return this.httpClient
+            .post(`${this.baseUrl}/reminders/types`, type, { withCredentials: true })
+    }
 
-  get(): Observable<any> {
-    return this.httpClient.get(`${this.baseUrl}/reminders/types`);
-  }
+    get(): Observable<any> {
+        return this.httpClient.get(`${this.baseUrl}/reminders/types`);
+    }
+
+    postAdvisee(type: {}, advisee: number): Observable<any> {
+        return this.httpClient
+            .post(`${this.baseUrl}/advisor/user/${advisee}/reminders/types`, type, { withCredentials: true })
+    }
+
+    getAdvisee(advisee: number): Observable<any> {
+        return this.httpClient.get(`${this.baseUrl}/advisor/user/${advisee}/reminders/types`);
+    }
 }

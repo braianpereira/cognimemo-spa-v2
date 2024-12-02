@@ -11,9 +11,10 @@ import {AuthService} from "../../../../../auth/auth.service";
 import {ReminderTypesService} from "../../../../../services/reminder_types.service";
 import {getUTC3Date} from '@utils/dateUtils'
 import {DefaultClass} from "../../../../../classes/default.class";
-import {DynamicDialogConfig, DynamicDialogRef} from "primeng/dynamicdialog";
+import {DialogService, DynamicDialogConfig, DynamicDialogRef} from "primeng/dynamicdialog";
 import {ConfirmationService} from "primeng/api";
 import {IReminder} from "../../reminders.component";
+import {FormComponent} from "../categories/form/form.component";
 
 @Component({
     selector: 'app-form-modal-reminder',
@@ -28,6 +29,9 @@ export class FormModalComponent extends DefaultClass implements OnInit {
     config = inject(DynamicDialogConfig)
     confirmationService = inject(ConfirmationService)
     fb = inject(FormBuilder)
+
+    dialogRef: DynamicDialogRef | undefined
+    dialogService = inject(DialogService)
 
     periods = [
         {description: 'Diariamente', value: 'daily'},
@@ -80,7 +84,7 @@ export class FormModalComponent extends DefaultClass implements OnInit {
             title: new FormControl('', [Validators.required]),
             reminder_date: new FormControl(this.today, [Validators.required]),
             ends_at: new FormControl(this.today, [Validators.required]),
-            reminder_type_id: new FormControl(1, [Validators.required]),
+            reminder_type_id: new FormControl(null, [Validators.required]),
             body: new FormControl('', []),
             repeat: new FormControl(booleanAttribute(false), []),
             period: new FormControl('', []),
@@ -99,32 +103,89 @@ export class FormModalComponent extends DefaultClass implements OnInit {
             }
         }
 
-        this.reminderTypesService.get().subscribe({
-            next: data => {
-                this.types = data
-            },
-            error: err => {
-                console.error('Error fetching reminder types:', err);
-                this.messageService.add({severity: 'error', summary: 'Error', detail: 'Failed to load reminder types'});
+        this.advisorService.advisee$.subscribe({
+            next: advisee => {
+                if(advisee) {
+                    this.reminderTypesService.getAdvisee(advisee.id).subscribe({
+                        next: data => {
+                            this.types = data
+                        },
+                        error: err => {
+                            console.error('Error fetching reminder types:', err);
+                            this.messageService.add({severity: 'error', summary: 'Error', detail: 'Failed to load reminder types'});
+                        }
+                    })
+                } else {
+                    this.reminderTypesService.get().subscribe({
+                        next: data => {
+                            this.types = data
+                        },
+                        error: err => {
+                            console.error('Error fetching reminder types:', err);
+                            this.messageService.add({severity: 'error', summary: 'Error', detail: 'Failed to load reminder types'});
+                        }
+                    })
+                }
             }
         })
+
     }
 
     updateEvent(reminder: IReminder, action: string) {
         this.loadingService.show()
 
-        this.reminderService.put(reminder, action).subscribe({
-            next: () => {
-                this.ref.close({severity: 'success', summary: 'Tarefa atualizada'})
-            },
-            error: error => {
-                this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro ao salvar o registro'});
-                // Optionally log to a monitoring service
-                // monitoringService.log(error);
-                this.loadingService.hide()
-            },
-            complete: () => {
-                this.loadingService.hide()
+        this.advisorService.advisee$.subscribe({
+            next: advisee => {
+                if (advisee) {
+                    this.reminderService.putAdvisee(reminder, advisee.id, action).subscribe({
+                        next: () => {
+                            this.ref.close({severity: 'success', summary: 'Tarefa atualizada'})
+                        },
+                        error: error => {
+                            if (error.status === 422) {
+                                const backendErrors = error.error.errors; // Estrutura típica de validação no Laravel
+                                for (const field in backendErrors) {
+                                    const control = this.form.get(field);
+                                    if (control) {
+                                        control.setErrors({ backend: backendErrors[field].join(' ') });
+                                    }
+                                }
+                            }
+                            this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro ao salvar o registro'});
+                            // Optionally log to a monitoring service
+                            // monitoringService.log(error);
+                            this.loadingService.hide()
+                        },
+                        complete: () => {
+                            this.loadingService.hide()
+                        }
+                    })
+                } else {
+                    this.reminderService.put(reminder, action).subscribe({
+                        next: () => {
+                            this.ref.close({severity: 'success', summary: 'Tarefa atualizada'})
+                        },
+                        error: error => {
+                            if (error.status === 422) {
+                                const backendErrors = error.error.errors; // Estrutura típica de validação no Laravel
+                                for (const field in backendErrors) {
+                                    const control = this.form.get(field);
+                                    if (control) {
+                                        control.setErrors({ backend: backendErrors[field].join(' ') });
+                                    }
+                                }
+                            }
+
+                            this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro ao salvar o registro'});
+                            // Optionally log to a monitoring service
+                            // monitoringService.log(error);
+                            this.loadingService.hide()
+                        },
+                        complete: () => {
+                            this.loadingService.hide()
+                        }
+                    })
+                }
             }
         })
     }
@@ -168,16 +229,63 @@ export class FormModalComponent extends DefaultClass implements OnInit {
                     } else {
                         this.loadingService.show()
 
-                        this.reminderService.post(reminder).subscribe({
-                            next: () => {
-                                this.ref.close({ severity: 'success', summary: 'Tarefa criada' })
-                                this.loadingService.hide()
-                            },
-                            error: error => {
-                                this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro ao salvar o registro'});
-                                // Optionally log to a monitoring service
-                                // monitoringService.log(error);
-                                this.loadingService.hide()
+                        this.advisorService.advisee$.subscribe({
+                            next: advisee => {
+                                if (advisee) {
+                                    this.reminderService.postAdvisee(reminder, advisee.id).subscribe({
+                                        next: () => {
+                                            this.ref.close({severity: 'success', summary: 'Tarefa criada'})
+                                            this.loadingService.hide()
+                                        },
+                                        error: error => {
+                                            if (error.status === 422) {
+                                                const backendErrors = error.error.errors; // Estrutura típica de validação no Laravel
+                                                for (const field in backendErrors) {
+                                                    const control = this.form.get(field);
+                                                    if (control) {
+                                                        control.setErrors({ backend: backendErrors[field].join(' ') });
+                                                    }
+                                                }
+                                            }
+
+                                            this.messageService.add({
+                                                severity: 'error',
+                                                summary: 'Erro',
+                                                detail: 'Ocorreu um erro ao salvar o registro'
+                                            });
+                                            // Optionally log to a monitoring service
+                                            // monitoringService.log(error);
+                                            this.loadingService.hide()
+                                        }
+                                    })
+                                } else {
+                                    this.reminderService.post(reminder).subscribe({
+                                        next: () => {
+                                            this.ref.close({severity: 'success', summary: 'Tarefa criada'})
+                                            this.loadingService.hide()
+                                        },
+                                        error: error => {
+                                            if (error.status === 422) {
+                                                const backendErrors = error.error.errors; // Estrutura típica de validação no Laravel
+                                                for (const field in backendErrors) {
+                                                    const control = this.form.get(field);
+                                                    if (control) {
+                                                        control.setErrors({ backend: backendErrors[field].join(' ') });
+                                                    }
+                                                }
+                                            }
+
+                                            this.messageService.add({
+                                                severity: 'error',
+                                                summary: 'Erro',
+                                                detail: 'Ocorreu um erro ao salvar o registro'
+                                            });
+                                            // Optionally log to a monitoring service
+                                            // monitoringService.log(error);
+                                            this.loadingService.hide()
+                                        }
+                                    })
+                                }
                             }
                         })
                     }
@@ -214,6 +322,33 @@ export class FormModalComponent extends DefaultClass implements OnInit {
                 || this.form.get(formControl)?.touched)
     }
 
+    newType($event) {
+        this.dialogRef = this.dialogService.open(FormComponent, {
+            header: 'Nova categoria',
+            contentStyle: { overflow: 'auto' },
+            width: '50vw',
+            closable: false,
+            height: 'auto',
+            transitionOptions: '150ms cubic-bezier(0, 0, 0.2, 1)',
+            breakpoints: {
+                '960px': '75vw',
+                '640px': '90vw'
+            }
+        })
+
+        this.dialogRef.onClose.subscribe((data: any) => {
+            if (data) {
+                this.messageService.add({ severity: data?.severity ?? 'info', detail: data?.summary, life: 3000 });
+
+                if (data.severity == 'success') {
+                    this.types = [...this.types, data.data];
+
+                    this.form.get('reminder_type_id').setValue(data.data.id)
+                }
+
+            }
+        });
+    }
 }
 
 export interface IReminderType {

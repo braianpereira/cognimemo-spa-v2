@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {NgClass, NgIf, NgStyle} from '@angular/common';
+import {NgIf} from '@angular/common';
 import {AuthService} from "../../../auth/auth.service";
 import {Router, RouterLink} from "@angular/router";
 import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -13,6 +13,7 @@ import {CheckboxModule} from "primeng/checkbox";
 import {ButtonModule} from "primeng/button";
 import {StyleClassModule} from "primeng/styleclass";
 import {DefaultClass} from "../../../classes/default.class";
+import {MessageService} from "primeng/api";
 
 @Component({
     selector: 'app-login',
@@ -21,7 +22,10 @@ import {DefaultClass} from "../../../classes/default.class";
     standalone: true,
     imports: [
         ReactiveFormsModule, FormsModule, RouterLink,
-        NgIf, CardModule, InputGroupModule, InputGroupAddonModule, InputTextModule, PasswordModule, CheckboxModule, ButtonModule, StyleClassModule]
+        NgIf, CardModule, InputGroupModule, InputGroupAddonModule,
+        InputTextModule, PasswordModule, CheckboxModule, ButtonModule, StyleClassModule,
+    ],
+    providers: [MessageService]
 })
 export class LoginComponent extends DefaultClass implements OnInit{
 

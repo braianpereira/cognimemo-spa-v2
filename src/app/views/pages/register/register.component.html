@@ -1,3 +1,132 @@
+<div class="min-h-screen  flex flex-row align-items-center md:w-screen">
+    <div class="justify-content-center grid md:w-screen">
+        <div class="col lg:col-offset-2 xl:col-offset-4 lg:col-10 xl:col-8 text-center">
+            <div class="grid text-center">
+                <p-card class="col-10 md:col-5 p-0 m-auto md:m-0">
+                    <ng-template pTemplate="body">
+                        <form
+                            (ngSubmit)="submit()"
+                            novalidate
+                            class="m-4"
+                        >
+                            <h1>Criar conta</h1>
+                            <p-inputGroup class="mb-3" [formGroup]="form">
+                                <p-inputGroupAddon>
+                                    <i class="pi pi-user"></i>
+                                </p-inputGroupAddon>
+                                <input
+                                    autocomplete="false"
+                                    pInputText
+                                    required
+                                    formControlName="name"
+                                    placeholder="Nome"
+                                    [class]="form.get('name')?.invalid && (form.get('name')?.dirty || form.get('name')?.touched) ? 'ng-invalid ng-dirty' : ''"
+                                />
+                            </p-inputGroup>
+                            <div *ngIf="form.get('name')?.invalid && (form.get('name')?.dirty || form.get('name')?.touched)"
+                                 class="invalid-feedback mb-3 text-red-500">
+                                <div *ngIf="form.get('name')?.hasError('required')" class="text-center">
+                                    E-mail obrigatório.
+                                </div>
+                                <div *ngIf="form.get('name')?.hasError('serverError')" class="text-center">
+                                    {{ form.get('name')?.getError('serverError') }}
+                                </div>
+                            </div>
+                            <p-inputGroup class="mb-3" [formGroup]="form">
+                                <p-inputGroupAddon>
+                                    <i class="pi pi-at"></i>
+                                </p-inputGroupAddon>
+                                <input
+                                    autocomplete="false"
+                                    pInputText
+                                    required
+                                    type="email"
+                                    formControlName="email"
+                                    placeholder="E-mail"
+                                    [class]="form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched) ? 'ng-invalid ng-dirty' : ''"
+                                />
+                            </p-inputGroup>
+                            <div *ngIf="form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)"
+                                 class="invalid-feedback mb-3 text-red-500">
+                                <div *ngIf="form.get('email')?.hasError('required')" class="text-center">
+                                    E-mail obrigatório.
+                                </div>
+                                <div *ngIf="form.get('email')?.hasError('serverError')" class="text-center">
+                                    {{ form.get('email')?.getError('serverError') }}
+                                </div>
+                            </div>
+                            <p-inputGroup class="mb-2" [formGroup]="form">
+                                <p-inputGroupAddon>
+                                    <i class="pi pi-lock"></i>
+                                </p-inputGroupAddon>
+                                <input
+                                    autoComplete="current-password"
+                                    pPassword
+                                    required
+                                    pInputText
+                                    placeholder="Senha"
+                                    type="password"
+                                    formControlName="password"
+                                    [class]="form.get('password')?.invalid && (form.get('password')?.dirty || form.get('password')?.touched) ? 'ng-invalid ng-dirty' : '' "
+                                />
+                            </p-inputGroup>
+                            <div *ngIf="form.get('password')?.invalid && (form.get('password')?.dirty)"
+                                 class="mb-3 text-red-500">
+                                <div *ngIf="form.get('password')?.hasError('required')" class="text-center">
+                                    Senha obrigatória.
+                                </div>
+                                <div *ngIf="form.get('password')?.hasError('minlength')" class="text-center">
+                                    Senha deve conter ao menos 8 caracteres.
+                                </div>
+                            </div>
+                            <p-inputGroup class="mb-2" [formGroup]="form">
+                                <p-inputGroupAddon>
+                                    <i class="pi pi-lock"></i>
+                                </p-inputGroupAddon>
+                                <input
+                                    autoComplete="current-password"
+                                    pPassword
+                                    required
+                                    pInputText
+                                    placeholder="Confirme a Senha"
+                                    type="password"
+                                    formControlName="password_confirmation"
+                                    [class]="form.get('password_confirmation')?.invalid && (form.get('password_confirmation')?.dirty || form.get('password_confirmation')?.touched) ? 'ng-invalid ng-dirty' : '' "
+                                />
+                            </p-inputGroup>
+                            <div *ngIf="form.get('password_confirmation')?.invalid && (form.get('password_confirmation')?.dirty || form.get('password_confirmation')?.touched)"
+                                 class="mb-3 text-red-500">
+                                <div *ngIf="form.get('password_confirmation')?.hasError('required')" class="text-center">
+                                    Senha obrigatória.
+                                </div>
+                                <div *ngIf="form.get('password_confirmation')?.hasError('passwordMismatch')" class="text-center">
+                                    Senha não coincidem.
+                                </div>
+                            </div>
+                            <p-inputGroup class="mb-5 mt-3">
+                                <p-checkbox id="checkOne" type="checkbox" />
+                                <label for="checkOne" class="ml-2">Permanecer logado</label>
+                            </p-inputGroup>
+                            <div class="formgroup-inline">
+                                <div class="xs:col-6">
+                                    <p-button styleClass="px-4 p-button-primary" type="submit">
+                                        Cadastrar
+                                    </p-button>
+                                </div>
+                                <div class="text-right ml-2">
+                                    <p-button styleClass="px-0 p-button-link" [routerLink]="'/login'">
+                                        Já tem cadastro?
+                                    </p-button>
+                                </div>
+                            </div>
+                        </form>
+                    </ng-template>
+                </p-card>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--
 <div class="bg-light dark:bg-transparent min-vh-100 d-flex flex-row align-items-center">
   <c-container>

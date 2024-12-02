@@ -1,19 +1,24 @@
-import {Component, ElementRef, inject, ViewChild} from '@angular/core';
+import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from "./service/app.layout.service";
 import {AuthService} from "../auth/auth.service";
 import {Router} from "@angular/router";
+import {UserService} from "../services/user.service";
+import {environment} from "../../environments/environment";
 
 @Component({
     selector: 'app-topbar',
     templateUrl: './app.topbar.component.html'
 })
-export class AppTopBarComponent {
+export class AppTopBarComponent implements OnInit {
 
     items!: MenuItem[];
 
     authService: AuthService = inject(AuthService);
+    userService = inject(UserService);
     router: Router = inject(Router);
+
+    user: any
 
     @ViewChild('menubutton') menuButton!: ElementRef;
 
@@ -22,24 +27,15 @@ export class AppTopBarComponent {
     @ViewChild('topbarmenu') menu!: ElementRef;
     perfilItems: MenuItem[] = [
         {
-            label: 'Options',
-            items: [
-                {
-                    label: 'Refresh',
-                    icon: 'pi pi-refresh'
-                },
-                {
-                    label: 'Export',
-                    icon: 'pi pi-upload'
-                },
-                {
-                    label: 'Logout',
-                    icon: 'pi pi-logout',
-                    command: () => {
-                        this.logout();
-                    }
-                }
-            ]
+            separator: true,
+            escape: true,
+        },
+        {
+            label: 'Logout',
+            icon: 'pi pi-logout',
+            command: () => {
+                this.logout();
+            }
         }
     ];
 
@@ -49,6 +45,15 @@ export class AppTopBarComponent {
         this.authService.logout().subscribe({
             next: () => {
                 this.router.navigate(['/login']);
+            }
+        })
+    }
+
+    ngOnInit(): void {
+        this.userService.get().subscribe({
+            next: (user) => {
+                this.user = user
+                this.userService.setLocalUser(user)
             }
         })
     }

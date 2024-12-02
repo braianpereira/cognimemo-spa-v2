@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { RemindersRoutingModule } from './reminders-routing.module';
+import { AdvisorsRoutingModule } from './advisors-routing.module';
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ButtonModule } from 'primeng/button';
@@ -15,12 +15,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
-import {RemindersComponent} from "./reminders.component";
 import {AccordionModule} from "primeng/accordion";
 import {BadgeModule} from "primeng/badge";
 import {StyleClassModule} from "primeng/styleclass";
-import {ListComponent} from "./components/list/list.component";
-import {FormModalComponent} from "./components/form-modal/form-modal.component";
 import {FloatLabelModule} from "primeng/floatlabel";
 import {CheckboxModule} from "primeng/checkbox";
 import {MultiSelectModule} from "primeng/multiselect";
@@ -30,11 +27,13 @@ import {InputGroupAddonModule} from "primeng/inputgroupaddon";
 import {CascadeSelectModule} from "primeng/cascadeselect";
 import {CalendarModule} from "primeng/calendar";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {AdvisorsComponent} from "./advisors.component";
+import {RemindersModule} from "../reminders/reminders.module";
 
 @NgModule({
     imports: [
         CommonModule,
-        RemindersRoutingModule,
+        AdvisorsRoutingModule,
         TableModule,
         FileUploadModule,
         FormsModule,
@@ -62,11 +61,9 @@ import {ConfirmDialogModule} from "primeng/confirmdialog";
         InputGroupAddonModule,
         CascadeSelectModule,
         CalendarModule,
-        ConfirmDialogModule
+        ConfirmDialogModule,
+        RemindersModule
     ],
-    exports: [
-        ListComponent
-    ],
-    declarations: [RemindersComponent, ListComponent, FormModalComponent]
+    declarations: [AdvisorsComponent]
 })
-export class RemindersModule { }
+export class AdvisorsModule { }

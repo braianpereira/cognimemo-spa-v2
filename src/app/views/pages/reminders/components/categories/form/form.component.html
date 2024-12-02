@@ -1,0 +1,43 @@
+<form
+    (ngSubmit)="submit($event)"
+>
+    <div class="grid mt-2">
+        <div class="col p-3">
+
+            <div class="formgrid grid p-3">
+                <div class="field col-12">
+                    <p-floatLabel [formGroup]="form">
+                        <input
+                            id="name"
+                            formControlName="name"
+                            type="text"
+                            pInputText
+                            class="w-full"
+                            [ngClass]="{'ng-invalid ng-dirty': isInvalid('name')}"
+                        />
+                        <label for="name">Nome</label>
+                    </p-floatLabel>
+                    <div *ngIf="isInvalid('name')"
+                         class="mb-3 text-red-500">
+                        <div *ngIf="form.get('name')?.hasError('required')" class="text-center">
+                            Campo obrigatório.
+                        </div>
+                    </div>
+
+                    <div *ngIf="isInvalid('name')"
+                         class="mb-3 text-red-500">
+                        <div *ngIf="form.get('name')?.hasError('backend')" class="text-center">
+                            {{ form.get('name')?.errors['backend'] }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="p-dialog-footer w-full">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" type="button" class="p-button-text" (click)="hideDialog($event)"></button>
+        <button pButton pRipple label="Salvar" icon="pi pi-check" type="submit" class=""></button>
+    </div>
+
+</form>

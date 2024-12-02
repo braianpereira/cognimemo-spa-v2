@@ -22,6 +22,11 @@ import {authGuard} from "./auth/auth.guard";
                                     title: 'Lembretes'
                                 }
                             },
+                            { path: 'advisees', loadChildren: () => import('./views/pages/advisors/advisors.module').then(m => m.AdvisorsModule),
+                                data: {
+                                    title: 'Orientados'
+                                }
+                            },
                         ]
                     },
                     {
