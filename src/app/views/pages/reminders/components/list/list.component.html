@@ -12,7 +12,7 @@
     columnResizeMode="expand"
     styleClass="p-datatable-sm"
     [rows]="10"
-    [globalFilterFields]="['title','reminder_date','repeat_desc','status']"
+    [globalFilterFields]="['title','reminder_date', 'reminder_type_desc', 'repeat_desc','status']"
     [paginator]="true"
     [rowsPerPageOptions]="[10,20,30]"
     [showCurrentPageReport]="true"
@@ -58,6 +58,7 @@
             </th>
             <th pSortableColumn="title">Nome <p-sortIcon field="title"></p-sortIcon></th>
             <th pSortableColumn="reminder_date">Data <p-sortIcon field="reminder_date"></p-sortIcon></th>
+            <th pSortableColumn="category">Categoria <p-sortIcon field="reminder_type_desc"></p-sortIcon></th>
             <th pSortableColumn="repeat_desc">Repete <p-sortIcon field="repeat_desc"></p-sortIcon></th>
             <th></th>
         </tr>
@@ -72,8 +73,12 @@
                {{reminder.title}}
             </td>
             <td>
-                <span class="p-column-title">Repete</span>
+                <span class="p-column-title">Data</span>
                 {{reminder.reminder_date | date: 'dd/MM/yyyy'}}
+            </td>
+            <td>
+                <span class="p-column-title">Categoria</span>
+                {{reminder.reminder_type_desc}}
             </td>
             <td>
                 <span class="p-column-title">Repete</span>

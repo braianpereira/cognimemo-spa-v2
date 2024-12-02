@@ -61,6 +61,7 @@ export interface IReminder {
     id: number | null;
     user_id: number | null;
     reminder_type_id: string | null;
+    reminder_type_desc: string | null;
     title: string | null;
     body: string |  null;
     ends_at: string | null;
